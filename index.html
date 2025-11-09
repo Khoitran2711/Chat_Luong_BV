@@ -1,138 +1,316 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phản ánh chất lượng bệnh viện</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phản Ánh Chất Lượng Dịch Vụ - Bệnh viện đa khoa Ninh Thuận</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), 
+                        url('images/bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            backdrop-filter: blur(3px);
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        
+        /* CSS CHO LOGO TRÒN VỚI ẢNH THẬT */
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+           background-image: url('images/logo.png');
+            background-size: cover;
+            background-position: center;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+            border: 3px solid #2c3e50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-color: white;
+        }
+        
+        .hospital-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .hospital-title h2 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            color: white;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .file-input {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .required::after {
+            content: " *";
+            color: red;
+        }
 
-    .container {
-      background: #fff;
-      padding: 30px 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      max-width: 500px;
-      width: 100%;
-    }
+        .optional::after {
+            content: " (Tùy chọn)";
+            color: #666;
+            font-weight: normal;
+            font-size: 14px;
+        }
 
-    h2 {
-      text-align: center;
-      color: #333;
-    }
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #555;
-    }
-
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    button {
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      margin-top: 20px;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    #successMsg, #errorMsg {
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-      display: none;
-    }
-
-    #successMsg { color: green; }
-    #errorMsg { color: red; }
-  </style>
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+            .form-container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .hospital-title h2 {
+                font-size: 20px;
+            }
+            .logo-circle {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+            .hospital-title {
+                padding: 12px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <div class="hospital-title">
+                <!-- LOGO TRÒN VỚI ẢNH THẬT -->
+                <div class="logo-circle"></div>
+                <h2>BỆNH VIỆN ĐA KHOA NINH THUẬN</h2>
+            </div>
+            <h1>🏥 PHẢN ÁNH CHẤT LƯỢNG DỊCH VỤ</h1>
+            
+        </div>
+        
+        <div class="form-container">
+            <!-- FORM VỚI FORMSUBMIT -->
+            <form id="feedbackForm" action="https://formsubmit.co/trandinhkhoi271198@gmail.com" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_subject" value="  🚨❗  BẠN CÓ PHẢN ÁNH MỚI ">
+                <input type="hidden" name="_template" value="table">
+                <!-- THÊM DÒNG NÀY ĐỂ NHẬN NHIỀU ẢNH -->
+                <input type="hidden" name="_append" value="attachment">
+                
+                <div class="form-group">
+                    <label class="required">Họ và tên</label>
+                    <input type="text" name="Họ và tên" placeholder="Nhập họ tên đầy đủ" required>
+                </div>
 
-<div class="container">
-  <h2>Phản ánh chất lượng bệnh viện</h2>
+                <div class="form-group">
+                    <label class="optional">Số điện thoại</label>
+                    <input type="tel" name="Số điện thoại" placeholder="Nhập số điện thoại (nếu có)" 
+                           pattern="[0-9]{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)">
+                    <small style="color: #666; font-size: 14px;">📞 Để bệnh viện liên hệ lại nếu cần thêm thông tin</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Khoa điều trị</label>
+                    <select name="Khoa điều trị" required>
+                        <option value="">-- Chọn khoa --</option>
+                        <option value="Khoa Yêu cầu">Khoa Yêu cầu</option>
+                        <option value="Khoa Khám bệnh">Khoa Khám bệnh</option>
+                        <option value="Khoa Cấp cứu">Khoa Cấp cứu</option>
+                        <option value="Khoa Nội">Khoa Nội</option>
+                        <option value="Khoa Ngoại">Khoa Ngoại</option>
+                        <option value="Khoa Sản">Khoa Sản</option>
+                        <option value="Khoa Nhi">Khoa Nhi</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Ngày phản ánh</label>
+                    <input type="date" name="Ngày phản ánh" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Giờ phản ánh</label>
+                    <input type="time" name="Giờ phản ánh" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Nội dung phản ánh</label>
+                    <textarea name="Nội dung phản ánh" placeholder="Mô tả chi tiết về thái độ phục vụ của bác sĩ/điều dưỡng..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Hình ảnh đính kèm (tối đa 2 ảnh)</label>
+                    <div class="file-input">
+                        <!-- THÊM [] VÀO name -->
+                        <input type="file" name="attachment[]" accept="image/*" multiple>
+                        <p style="margin-top: 10px; color: #666;">📎 Chọn ảnh từ thiết bị của bạn</p>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    📤 GỬI PHẢN ÁNH
+                </button>
+            </form>
 
-  <form id="feedbackForm">
-    <label for="thongtin">Thông tin phản ánh:</label>
-    <textarea id="thongtin" name="thongtin" placeholder="Nhập nội dung phản ánh..." required></textarea>
+            <div class="success-message" id="successMessage">
+                <h3>✅ GỬI THÀNH CÔNG!</h3>
+                <p>Cảm ơn bạn đã góp ý. Thông tin của bạn đã được ghi nhận.</p>
+            </div>
+        </div>
+    </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            const dateInput = document.querySelector('input[name="Ngày phản ánh"]');
+            const timeInput = document.querySelector('input[name="Giờ phản ánh"]');
+            
+            if (!dateInput.value) {
+                dateInput.valueAsDate = new Date();
+            }
+            if (!timeInput.value) {
+                const now = new Date();
+                timeInput.value = now.getHours().toString().padStart(2, '0') + ':' + 
+                                now.getMinutes().toString().padStart(2, '0');
+            }
+            
+            // Hiển thị thông báo thành công
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+            }, 1000);
+        });
+        
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            if (this.files.length > 2) {
+                alert('Chỉ được chọn tối đa 2 ảnh!');
+                this.value = '';
+            }
+        });
 
-    <label for="phone">Số điện thoại (tùy chọn):</label>
-    <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại">
-
-    <button type="submit">Gửi phản ánh</button>
-  </form>
-
-  <p id="successMsg">Cảm ơn bạn đã gửi phản ánh!</p>
-  <p id="errorMsg">Gửi phản ánh thất bại. Vui lòng thử lại.</p>
-</div>
-
-<script>
-  const form = document.getElementById('feedbackForm');
-  const successMsg = document.getElementById('successMsg');
-  const errorMsg = document.getElementById('errorMsg');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    successMsg.style.display = 'none';
-    errorMsg.style.display = 'none';
-
-    const data = {
-      thongtin: form.thongtin.value,
-      email: form.email.value,
-      phone: form.phone.value
-    };
-
-    try {
-      const res = await fetch('https://YOUR_NETLIFY_FUNCTION_URL/send-feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        successMsg.style.display = 'block';
-        form.reset();
-      } else {
-        errorMsg.style.display = 'block';
-      }
-    } catch (err) {
-      console.error(err);
-      errorMsg.style.display = 'block';
-    }
-  });
-</script>
-
+        document.querySelector('input[name="Số điện thoại"]').addEventListener('input', function(e) {
+            const phone = this.value.replace(/\D/g, '');
+            if (phone && (phone.length < 10 || phone.length > 11)) {
+                this.setCustomValidity('Số điện thoại phải có 10-11 chữ số');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
 </body>
 </html>
