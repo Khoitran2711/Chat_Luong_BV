@@ -114,23 +114,21 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        .form-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .form-header i {
-            font-size: 48px;
-            color: #3498db;
-            margin-bottom: 10px;
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-header">
-            <h1>📝 Phản Ánh Dịch Vụ Bệnh Viện</h1>
-            <p style="color: #7f8c8d; margin: 0;">Mọi ý kiến đóng góp của bạn giúp chúng tôi cải thiện dịch vụ tốt hơn</p>
-        </div>
+        <h1>📝 Phản Ánh Dịch Vụ Bệnh Viện</h1>
+        <p style="text-align: center; color: #7f8c8d; margin-bottom: 30px;">Mọi ý kiến đóng góp của bạn giúp chúng tôi cải thiện dịch vụ tốt hơn</p>
         
         <form id="phanAnhForm">
             <div class="form-group">
@@ -152,8 +150,6 @@
                     <option value="Khoa Ngoại tổng hợp">Khoa Ngoại tổng hợp</option>
                     <option value="Khoa Sản">Khoa Sản</option>
                     <option value="Khoa Nhi">Khoa Nhi</option>
-                    <option value="Khoa Chẩn đoán hình ảnh">Khoa Chẩn đoán hình ảnh</option>
-                    <option value="Khoa Xét nghiệm">Khoa Xét nghiệm</option>
                 </select>
             </div>
             
@@ -165,9 +161,6 @@
                     <option value="Thái độ nhân viên">Thái độ nhân viên</option>
                     <option value="Chất lượng dịch vụ">Chất lượng dịch vụ</option>
                     <option value="Cơ sở vật chất">Cơ sở vật chất</option>
-                    <option value="Vệ sinh">Vệ sinh môi trường</option>
-                    <option value="Chi phí">Chi phí dịch vụ</option>
-                    <option value="Khác">Ý kiến khác</option>
                 </select>
             </div>
             
@@ -188,28 +181,39 @@
         <div id="errorMessage" class="message error">
             ❌ Lỗi khi gửi phản ánh. Vui lòng thử lại.
         </div>
+
+        <div class="debug-info">
+            <strong>🔧 Thông tin kết nối:</strong><br>
+            URL: <span id="debugUrl"></span><br>
+            Status: <span id="debugStatus">Chưa kết nối</span>
+        </div>
     </div>
 
     <script>
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
+
+        // Hiển thị URL để debug
+        document.getElementById('debugUrl').textContent = APPS_SCRIPT_URL;
 
         document.getElementById('phanAnhForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
-            const originalText = btnText.textContent;
+            const debugStatus = document.getElementById('debugStatus');
             
             // Hiển thị loading
             submitBtn.disabled = true;
             btnText.innerHTML = '<div class="loading"></div>Đang gửi...';
+            debugStatus.textContent = 'Đang kết nối...';
+            debugStatus.style.color = '#f39c12';
             
             // Ẩn thông báo cũ
             document.getElementById('successMessage').style.display = 'none';
             document.getElementById('errorMessage').style.display = 'none';
             
             try {
-                // Lấy và validate dữ liệu form
+                // Lấy dữ liệu form
                 const formData = new FormData(this);
                 const data = {
                     hoTen: (formData.get('hoTen') || '').trim(),
@@ -220,89 +224,94 @@
                     thoiGian: new Date().toLocaleString('vi-VN')
                 };
 
-                // Validate dữ liệu
-                if (!data.hoTen || !data.soDienThoai || !data.khoaPhong || !data.loaiPhanAnh || !data.noiDung) {
-                    throw new Error('Vui lòng điền đầy đủ thông tin bắt buộc');
-                }
-
-                if (data.soDienThoai.length < 10) {
-                    throw new Error('Số điện thoại không hợp lệ');
-                }
-
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
-                // Gửi request đến Apps Script
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                // GIẢI PHÁP ĐẶC BIỆT: Dùng XMLHttpRequest thay vì fetch
+                const result = await sendWithXHR(data);
                 
-                console.log('📨 Response status:', response.status);
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Lỗi server: ${response.status} - ${errorText}`);
-                }
-                
-                const result = await response.text();
                 console.log('✅ Phản hồi từ server:', result);
+                debugStatus.textContent = 'Kết nối thành công!';
+                debugStatus.style.color = '#27ae60';
                 
                 // Hiển thị thông báo thành công
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
                 
-                // Tự động ẩn thông báo sau 5 giây
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 5000);
-                
             } catch (error) {
                 console.error('❌ Lỗi:', error);
+                debugStatus.textContent = 'Lỗi kết nối';
+                debugStatus.style.color = '#e74c3c';
+                
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('errorMessage').innerHTML = `❌ ${error.message}`;
                 
-                // Tự động ẩn thông báo lỗi sau 5 giây
-                setTimeout(() => {
-                    document.getElementById('errorMessage').style.display = 'none';
-                }, 5000);
             } finally {
                 // Khôi phục button
                 submitBtn.disabled = false;
-                btnText.textContent = originalText;
+                btnText.textContent = '📤 Gửi Phản Ánh';
             }
         });
 
+        // Sử dụng XMLHttpRequest thay vì fetch để tránh CORS issues
+        function sendWithXHR(data) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', APPS_SCRIPT_URL, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            resolve(xhr.responseText);
+                        } else {
+                            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+                        }
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    reject(new Error('Network error - Không thể kết nối đến server'));
+                };
+                
+                xhr.ontimeout = function() {
+                    reject(new Error('Request timeout - Quá thời gian chờ'));
+                };
+                
+                xhr.timeout = 10000; // 10 seconds timeout
+                xhr.send(JSON.stringify(data));
+            });
+        }
+
         // Test kết nối khi trang load
         async function testConnection() {
+            const debugStatus = document.getElementById('debugStatus');
             try {
-                console.log('🔗 Đang kiểm tra kết nối...');
-                const response = await fetch(APPS_SCRIPT_URL);
-                const result = await response.text();
-                console.log('🔗 Kết nối thành công:', result);
+                debugStatus.textContent = 'Đang kiểm tra kết nối...';
+                debugStatus.style.color = '#f39c12';
+                
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', APPS_SCRIPT_URL, true);
+                xhr.timeout = 5000;
+                
+                await new Promise((resolve, reject) => {
+                    xhr.onload = () => resolve(xhr);
+                    xhr.onerror = () => reject(new Error('Network error'));
+                    xhr.ontimeout = () => reject(new Error('Timeout'));
+                    xhr.send();
+                });
+                
+                debugStatus.textContent = 'Kết nối OK - Sẵn sàng';
+                debugStatus.style.color = '#27ae60';
+                console.log('🔗 Kết nối thành công');
             } catch (error) {
+                debugStatus.textContent = `Lỗi: ${error.message}`;
+                debugStatus.style.color = '#e74c3c';
                 console.error('🔗 Lỗi kết nối:', error);
             }
         }
         
         // Chạy test khi trang load
-        window.addEventListener('load', () => {
-            testConnection();
-            console.log('🚨 Để debug, mở Developer Console (F12) để xem chi tiết lỗi');
-        });
-
-        // Thêm hiệu ứng cho form
-        document.querySelectorAll('input, select, textarea').forEach(element => {
-            element.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'translateY(-2px)';
-            });
-            
-            element.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'translateY(0)';
-            });
-        });
+        window.addEventListener('load', testConnection);
     </script>
 </body>
 </html>
