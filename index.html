@@ -105,7 +105,7 @@
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
                 // 👇 THAY THẾ BẰNG URL APPS SCRIPT CỦA BẠN
-                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8Qax34K3G6Sqij4ZWsl7866DinFNp-E9aP8qRxH-sjbGuoZK1rrDm67Tk9fwPtYEF/exec';
+                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
                 
                 // Gửi request đến Apps Script
                 const response = await fetch(APPS_SCRIPT_URL, {
@@ -141,7 +141,7 @@
         // Test kết nối khi trang load
         async function testConnection() {
             try {
-                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8Qax34K3G6Sqij4ZWsl7866DinFNp-E9aP8qRxH-sjbGuoZK1rrDm67Tk9fwPtYEF/exec';
+                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
                 const response = await fetch(APPS_SCRIPT_URL);
                 const result = await response.text();
                 console.log('🔗 Kết nối thành công:', result);
