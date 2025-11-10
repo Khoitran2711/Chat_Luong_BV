@@ -178,59 +178,46 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('phanAnhForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Lấy dữ liệu từ form
-            const formData = new FormData(this);
-            const data = {
-                hoTen: formData.get('hoTen'),
-                soDienThoai: formData.get('soDienThoai'),
-                email: formData.get('email'),
-                khoaPhong: formData.get('khoaPhong'),
-                loaiPhanAnh: formData.get('loaiPhanAnh'),
-                noiDung: formData.get('noiDung'),
-                mucDoUuTien: formData.get('mucDoUuTien'),
-                thoiGian: new Date().toLocaleString('vi-VN')
-            };
-            
-            // Gửi dữ liệu đến Google Apps Script
-            fetch("https://script.google.com/macros/s/AKfycbzSOTDOVJOkuJKjAJ3KagOBuoGgW8e9-agERizuHsdYS2l5MbsGeNuO0eySxGw1dqyNhA/exec", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.text();
-            })
-            .then(msg => {
-                console.log('Response:', msg);
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-                document.getElementById('phanAnhForm').reset();
-                
-                // Ẩn thông báo sau 5 giây
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 5000);
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
-                
-                // Ẩn thông báo lỗi sau 5 giây
-                setTimeout(() => {
-                    document.getElementById('errorMessage').style.display = 'none';
-                }, 5000);
-            });
-        });
-    </script>
+   <script>
+document.getElementById('phanAnhForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        hoTen: formData.get('hoTen'),
+        soDienThoai: formData.get('soDienThoai'),
+        email: formData.get('email'),
+        khoaPhong: formData.get('khoaPhong'),
+        loaiPhanAnh: formData.get('loaiPhanAnh'),
+        noiDung: formData.get('noiDung'),
+        mucDoUuTien: formData.get('mucDoUuTien'),
+        thoiGian: new Date().toLocaleString('vi-VN')
+    };
+    
+    fetch("https://script.google.com/macros/s/AKfycbzSOTDOVJOkuJKjAJ3KagOBuoGgW8e9-agERizuHsdYS2l5MbsGeNuO0eySxGw1dqyNhA/exec", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        document.getElementById('phanAnhForm').reset();
+        document.getElementById('successMessage').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 5000);
+    })
+    .catch(err => {
+        alert("❌ Lỗi khi gửi phản ánh: " + err);
+        document.getElementById('errorMessage').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('errorMessage').style.display = 'none';
+        }, 5000);
+    });
+});
+</script>
 </body>
 </html>
