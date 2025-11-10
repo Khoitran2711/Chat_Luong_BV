@@ -1,223 +1,42 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Phản Ánh Dịch Vụ</title>
-    <style>
-        :root {
-            --primary: #1a73e8;
-            --secondary: #34a853;
-            --danger: #ea4335;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #333;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-        
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-        }
-        
-        .btn:hover {
-            background-color: #0d5bb9;
-        }
-        
-        .success-message {
-            background-color: var(--secondary);
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        .error-message {
-            background-color: var(--danger);
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        .required {
-            color: var(--danger);
-        }
-    </style>
+    <title>Test Phản Ánh</title>
 </head>
 <body>
-    <div class="container">
-        <h1>📝 Hệ Thống Phản Ánh Dịch Vụ Tại Bệnh Viện Ninh Thuận </h1>
-        
-        <form id="phanAnhForm">
-            <div class="form-group">
-                <label for="hoTen">Họ và tên <span class="required">*</span></label>
-                <input type="text" id="hoTen" name="hoTen" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="soDienThoai">Số điện thoại <span class="required">*</span></label>
-                <input type="tel" id="soDienThoai" name="soDienThoai" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email">
-            </div>
-            
-            <div class="form-group">
-                <label for="khoaPhong">Khoa phòng <span class="required">*</span></label>
-                <select id="khoaPhong" name="khoaPhong" required>
-                    <option value="">-- Chọn khoa phòng --</option>
-                    <option value="cap-cuu">Khoa Cấp cứu</option>
-                    <option value="noi-khoa">Khoa Nội tổng hợp</option>
-                    <option value="ngoai-khoa">Khoa Ngoại tổng hợp</option>
-                    <option value="san-khoa">Khoa Sản</option>
-                    <option value="nhi-khoa">Khoa Nhi</option>
-                    <option value="chan-doan-hinh-anh">Chẩn đoán hình ảnh</option>
-                    <option value="kham-benh">Khu khám bệnh</option>
-                    <option value="khac">Khác</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="loaiPhanAnh">Loại phản ánh <span class="required">*</span></label>
-                <select id="loaiPhanAnh" name="loaiPhanAnh" required>
-                    <option value="">-- Chọn loại phản ánh --</option>
-                    <option value="thoi-gian-cho">Thời gian chờ đợi lâu</option>
-                    <option value="thai-do-nhan-vien">Thái độ nhân viên</option>
-                    <option value="chat-luong-dich-vu">Chất lượng dịch vụ</option>
-                    <option value="co-so-vat-chat">Cơ sở vật chất</option>
-                    <option value="ve-sinh">Vệ sinh môi trường</option>
-                    <option value="chi-phi">Chi phí dịch vụ</option>
-                    <option value="khac">Khác</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="noiDung">Nội dung phản ánh <span class="required">*</span></label>
-                <textarea id="noiDung" name="noiDung" placeholder="Mô tả chi tiết vấn đề bạn gặp phải..." required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="mucDoUuTien">Mức độ ưu tiên</label>
-                <select id="mucDoUuTien" name="mucDoUuTien">
-                    <option value="thap">Thấp</option>
-                    <option value="trung-binh" selected>Trung bình</option>
-                    <option value="cao">Cao</option>
-                    <option value="khan-cap">Khẩn cấp</option>
-                </select>
-            </div>
-            
-            <button type="submit" class="btn">Gửi Phản Ánh</button>
-        </form>
-        
-        <div id="successMessage" class="success-message">
-            ✅ Phản ánh của bạn đã được gửi thành công! Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
-        </div>
-        
-        <div id="errorMessage" class="error-message">
-            ❌ Có lỗi xảy ra khi gửi phản ánh. Vui lòng thử lại sau.
-        </div>
-    </div>
+    <h2>Test Form Phản Ánh</h2>
+    <form id="testForm">
+        <input type="text" name="hoTen" placeholder="Họ tên" value="Nguyễn Văn Test" required><br>
+        <input type="text" name="soDienThoai" placeholder="Số điện thoại" value="0912345678" required><br>
+        <input type="text" name="khoaPhong" placeholder="Khoa phòng" value="Cấp cứu" required><br>
+        <input type="text" name="loaiPhanAnh" placeholder="Loại phản ánh" value="Test hệ thống" required><br>
+        <textarea name="noiDung" placeholder="Nội dung" required>Đây là test hệ thống</textarea><br>
+        <input type="text" name="mucDoUuTien" placeholder="Mức độ ưu tiên" value="Trung bình"><br>
+        <button type="submit">Gửi Test</button>
+    </form>
+    <div id="result"></div>
 
-   <script>
-document.getElementById('phanAnhForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const data = {
-        hoTen: formData.get('hoTen'),
-        soDienThoai: formData.get('soDienThoai'),
-        email: formData.get('email'),
-        khoaPhong: formData.get('khoaPhong'),
-        loaiPhanAnh: formData.get('loaiPhanAnh'),
-        noiDung: formData.get('noiDung'),
-        mucDoUuTien: formData.get('mucDoUuTien'),
-        thoiGian: new Date().toLocaleString('vi-VN')
-    };
-    
-    fetch("https://script.google.com/macros/s/AKfycbz8Qax34K3G6Sqij4ZWsl7866DinFNp-E9aP8qRxH-sjbGuoZK1rrDm67Tk9fwPtYEF/exec", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.text())
-    .then(msg => {
-        alert(msg);
-        document.getElementById('phanAnhForm').reset();
-        document.getElementById('successMessage').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('successMessage').style.display = 'none';
-        }, 5000);
-    })
-    .catch(err => {
-        alert("❌ Lỗi khi gửi phản ánh: " + err);
-        document.getElementById('errorMessage').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('errorMessage').style.display = 'none';
-        }, 5000);
-    });
-});
-</script>
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                // 👇 THAY THẰNG URL CỦA BẠN
+                const response = await fetch('https://script.google.com/macros/s/AKfycbz8Qax34K3G6Sqij4ZWsl7866DinFNp-E9aP8qRxH-sjbGuoZK1rrDm67Tk9fwPtYEF/exec', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.text();
+                document.getElementById('result').innerHTML = `<p style="color: green;">${result}</p>`;
+                console.log('✅ Thành công:', result);
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">❌ Lỗi: ${error}</p>`;
+                console.error('❌ Lỗi:', error);
+            }
+        });
+    </script>
 </body>
 </html>
