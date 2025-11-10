@@ -5,140 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phản Ánh Dịch Vụ Bệnh Viện</title>
     <style>
-        * { 
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        }
-        body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        h1 { 
-            color: #2c3e50; 
-            text-align: center; 
-            margin-bottom: 30px; 
-            font-size: 28px;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .form-group { 
-            margin-bottom: 25px; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            color: #2c3e50;
-        }
-        input, select, textarea { 
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 2px solid #bdc3c7; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            transition: all 0.3s ease;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            outline: none;
-        }
-        textarea { 
-            height: 120px; 
-            resize: vertical; 
-        }
-        .btn { 
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white; 
-            padding: 15px 30px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 18px; 
-            font-weight: 600;
-            width: 100%; 
-            transition: all 0.3s ease;
-        }
-        .btn:hover { 
-            background: linear-gradient(135deg, #2980b9, #3498db);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        .message { 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-top: 20px; 
-            text-align: center; 
-            display: none;
-            font-weight: 600;
-        }
-        .success { 
-            background: #2ecc71; 
-            color: white; 
-            border-left: 5px solid #27ae60;
-        }
-        .error { 
-            background: #e74c3c; 
-            color: white; 
-            border-left: 5px solid #c0392b;
-        }
-        .required { 
-            color: #e74c3c; 
-        }
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .debug-info {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #6c757d;
-        }
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f5f7fa; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; text-align: center; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        textarea { height: 120px; resize: vertical; }
+        .btn { background: #1a73e8; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
+        .btn:hover { background: #0d5bb9; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .message { padding: 15px; border-radius: 5px; margin-top: 20px; text-align: center; display: none; }
+        .success { background: #34a853; color: white; }
+        .error { background: #ea4335; color: white; }
+        .required { color: #ea4335; }
+        .status { margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📝 Phản Ánh Dịch Vụ Bệnh Viện</h1>
-        <p style="text-align: center; color: #7f8c8d; margin-bottom: 30px;">Mọi ý kiến đóng góp của bạn giúp chúng tôi cải thiện dịch vụ tốt hơn</p>
         
         <form id="phanAnhForm">
             <div class="form-group">
                 <label for="hoTen">Họ và tên <span class="required">*</span></label>
-                <input type="text" id="hoTen" name="hoTen" required placeholder="Nhập họ và tên đầy đủ">
+                <input type="text" id="hoTen" name="hoTen" required>
             </div>
             
             <div class="form-group">
                 <label for="soDienThoai">Số điện thoại <span class="required">*</span></label>
-                <input type="tel" id="soDienThoai" name="soDienThoai" required placeholder="Nhập số điện thoại">
+                <input type="tel" id="soDienThoai" name="soDienThoai" required>
             </div>
             
             <div class="form-group">
@@ -166,47 +63,60 @@
             
             <div class="form-group">
                 <label for="noiDung">Nội dung phản ánh <span class="required">*</span></label>
-                <textarea id="noiDung" name="noiDung" placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải..." required></textarea>
+                <textarea id="noiDung" name="noiDung" placeholder="Mô tả chi tiết vấn đề..." required></textarea>
             </div>
             
-            <button type="submit" class="btn" id="submitBtn">
-                <span id="btnText">📤 Gửi Phản Ánh</span>
-            </button>
+            <button type="submit" class="btn" id="submitBtn">Gửi Phản Ánh</button>
         </form>
         
         <div id="successMessage" class="message success">
-            ✅ Phản ánh đã được gửi thành công! Cảm ơn bạn đã đóng góp ý kiến.
+            ✅ Phản ánh đã được gửi thành công!
         </div>
         
         <div id="errorMessage" class="message error">
             ❌ Lỗi khi gửi phản ánh. Vui lòng thử lại.
         </div>
 
-        <div class="debug-info">
-            <strong>🔧 Thông tin kết nối:</strong><br>
-            URL: <span id="debugUrl"></span><br>
-            Status: <span id="debugStatus">Chưa kết nối</span>
+        <div class="status" id="status">
+            Trạng thái: Đang kiểm tra kết nối...
         </div>
     </div>
 
     <script>
+        // URL Apps Script - ĐÃ XÁC NHẬN ĐÚNG
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
 
-        // Hiển thị URL để debug
-        document.getElementById('debugUrl').textContent = APPS_SCRIPT_URL;
+        // Kiểm tra kết nối khi trang load
+        async function checkConnection() {
+            const statusEl = document.getElementById('status');
+            try {
+                statusEl.innerHTML = 'Trạng thái: Đang kiểm tra kết nối...';
+                
+                // Dùng fetch đơn giản không có headers
+                const response = await fetch(APPS_SCRIPT_URL);
+                const result = await response.text();
+                
+                statusEl.innerHTML = `Trạng thái: ✅ Kết nối thành công!<br><small>${result}</small>`;
+                statusEl.style.color = 'green';
+                console.log('✅ Kết nối thành công:', result);
+            } catch (error) {
+                statusEl.innerHTML = `Trạng thái: ❌ Lỗi kết nối - ${error.message}`;
+                statusEl.style.color = 'red';
+                console.error('❌ Lỗi kết nối:', error);
+            }
+        }
 
+        // Xử lý submit form
         document.getElementById('phanAnhForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const debugStatus = document.getElementById('debugStatus');
+            const statusEl = document.getElementById('status');
             
             // Hiển thị loading
             submitBtn.disabled = true;
-            btnText.innerHTML = '<div class="loading"></div>Đang gửi...';
-            debugStatus.textContent = 'Đang kết nối...';
-            debugStatus.style.color = '#f39c12';
+            submitBtn.textContent = 'Đang gửi...';
+            statusEl.innerHTML = 'Trạng thái: Đang gửi dữ liệu...';
             
             // Ẩn thông báo cũ
             document.getElementById('successMessage').style.display = 'none';
@@ -216,102 +126,53 @@
                 // Lấy dữ liệu form
                 const formData = new FormData(this);
                 const data = {
-                    hoTen: (formData.get('hoTen') || '').trim(),
-                    soDienThoai: (formData.get('soDienThoai') || '').trim(),
+                    hoTen: formData.get('hoTen'),
+                    soDienThoai: formData.get('soDienThoai'),
                     khoaPhong: formData.get('khoaPhong'),
                     loaiPhanAnh: formData.get('loaiPhanAnh'),
-                    noiDung: (formData.get('noiDung') || '').trim(),
+                    noiDung: formData.get('noiDung'),
                     thoiGian: new Date().toLocaleString('vi-VN')
                 };
 
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
-                // GIẢI PHÁP ĐẶC BIỆT: Dùng XMLHttpRequest thay vì fetch
-                const result = await sendWithXHR(data);
+                // GIẢI PHÁP ĐƠN GIẢN: Dùng fetch không headers phức tạp
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                    // KHÔNG dùng headers để tránh CORS preflight
+                });
                 
+                console.log('📨 Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const result = await response.text();
                 console.log('✅ Phản hồi từ server:', result);
-                debugStatus.textContent = 'Kết nối thành công!';
-                debugStatus.style.color = '#27ae60';
                 
                 // Hiển thị thông báo thành công
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
+                statusEl.innerHTML = 'Trạng thái: ✅ Gửi thành công!';
+                statusEl.style.color = 'green';
                 
             } catch (error) {
                 console.error('❌ Lỗi:', error);
-                debugStatus.textContent = 'Lỗi kết nối';
-                debugStatus.style.color = '#e74c3c';
-                
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('errorMessage').innerHTML = `❌ ${error.message}`;
-                
+                document.getElementById('errorMessage').innerHTML = '❌ Lỗi: ' + error.message;
+                statusEl.innerHTML = 'Trạng thái: ❌ Lỗi khi gửi';
+                statusEl.style.color = 'red';
             } finally {
                 // Khôi phục button
                 submitBtn.disabled = false;
-                btnText.textContent = '📤 Gửi Phản Ánh';
+                submitBtn.textContent = 'Gửi Phản Ánh';
             }
         });
 
-        // Sử dụng XMLHttpRequest thay vì fetch để tránh CORS issues
-        function sendWithXHR(data) {
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', APPS_SCRIPT_URL, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            resolve(xhr.responseText);
-                        } else {
-                            reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
-                        }
-                    }
-                };
-                
-                xhr.onerror = function() {
-                    reject(new Error('Network error - Không thể kết nối đến server'));
-                };
-                
-                xhr.ontimeout = function() {
-                    reject(new Error('Request timeout - Quá thời gian chờ'));
-                };
-                
-                xhr.timeout = 10000; // 10 seconds timeout
-                xhr.send(JSON.stringify(data));
-            });
-        }
-
-        // Test kết nối khi trang load
-        async function testConnection() {
-            const debugStatus = document.getElementById('debugStatus');
-            try {
-                debugStatus.textContent = 'Đang kiểm tra kết nối...';
-                debugStatus.style.color = '#f39c12';
-                
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', APPS_SCRIPT_URL, true);
-                xhr.timeout = 5000;
-                
-                await new Promise((resolve, reject) => {
-                    xhr.onload = () => resolve(xhr);
-                    xhr.onerror = () => reject(new Error('Network error'));
-                    xhr.ontimeout = () => reject(new Error('Timeout'));
-                    xhr.send();
-                });
-                
-                debugStatus.textContent = 'Kết nối OK - Sẵn sàng';
-                debugStatus.style.color = '#27ae60';
-                console.log('🔗 Kết nối thành công');
-            } catch (error) {
-                debugStatus.textContent = `Lỗi: ${error.message}`;
-                debugStatus.style.color = '#e74c3c';
-                console.error('🔗 Lỗi kết nối:', error);
-            }
-        }
-        
-        // Chạy test khi trang load
-        window.addEventListener('load', testConnection);
+        // Chạy kiểm tra kết nối khi trang load
+        window.addEventListener('load', checkConnection);
     </script>
 </body>
 </html>
