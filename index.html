@@ -5,46 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phản Ánh Dịch Vụ Bệnh Viện</title>
     <style>
-        * { box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: #f5f7fa; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #1a73e8; text-align: center; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: 500; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-        textarea { height: 120px; resize: vertical; }
-        .btn { background: #1a73e8; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
-        .btn:hover { background: #0d5bb9; }
-        .message { padding: 15px; border-radius: 5px; margin-top: 20px; text-align: center; display: none; }
-        .success { background: #34a853; color: white; }
-        .error { background: #ea4335; color: white; }
-        .required { color: #ea4335; }
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 { 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            font-size: 28px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .form-group { 
+            margin-bottom: 25px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: #2c3e50;
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #bdc3c7; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        textarea { 
+            height: 120px; 
+            resize: vertical; 
+        }
+        .btn { 
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: 600;
+            width: 100%; 
+            transition: all 0.3s ease;
+        }
+        .btn:hover { 
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .message { 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            text-align: center; 
+            display: none;
+            font-weight: 600;
+        }
+        .success { 
+            background: #2ecc71; 
+            color: white; 
+            border-left: 5px solid #27ae60;
+        }
+        .error { 
+            background: #e74c3c; 
+            color: white; 
+            border-left: 5px solid #c0392b;
+        }
+        .required { 
+            color: #e74c3c; 
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-header i {
+            font-size: 48px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📝 Phản Ánh Dịch Vụ  Bệnh Viện</h1>
+        <div class="form-header">
+            <h1>📝 Phản Ánh Dịch Vụ Bệnh Viện</h1>
+            <p style="color: #7f8c8d; margin: 0;">Mọi ý kiến đóng góp của bạn giúp chúng tôi cải thiện dịch vụ tốt hơn</p>
+        </div>
         
         <form id="phanAnhForm">
             <div class="form-group">
                 <label for="hoTen">Họ và tên <span class="required">*</span></label>
-                <input type="text" id="hoTen" name="hoTen" required>
+                <input type="text" id="hoTen" name="hoTen" required placeholder="Nhập họ và tên đầy đủ">
             </div>
             
             <div class="form-group">
                 <label for="soDienThoai">Số điện thoại <span class="required">*</span></label>
-                <input type="tel" id="soDienThoai" name="soDienThoai" required>
+                <input type="tel" id="soDienThoai" name="soDienThoai" required placeholder="Nhập số điện thoại">
             </div>
             
             <div class="form-group">
                 <label for="khoaPhong">Khoa phòng <span class="required">*</span></label>
                 <select id="khoaPhong" name="khoaPhong" required>
                     <option value="">-- Chọn khoa phòng --</option>
-                    <option value="cap-cuu">Khoa Cấp cứu</option>
-                    <option value="noi-khoa">Khoa Nội tổng hợp</option>
-                    <option value="ngoai-khoa">Khoa Ngoại tổng hợp</option>
-                    <option value="san-khoa">Khoa Sản</option>
-                    <option value="nhi-khoa">Khoa Nhi</option>
+                    <option value="Khoa Cấp cứu">Khoa Cấp cứu</option>
+                    <option value="Khoa Nội tổng hợp">Khoa Nội tổng hợp</option>
+                    <option value="Khoa Ngoại tổng hợp">Khoa Ngoại tổng hợp</option>
+                    <option value="Khoa Sản">Khoa Sản</option>
+                    <option value="Khoa Nhi">Khoa Nhi</option>
+                    <option value="Khoa Chẩn đoán hình ảnh">Khoa Chẩn đoán hình ảnh</option>
+                    <option value="Khoa Xét nghiệm">Khoa Xét nghiệm</option>
                 </select>
             </div>
             
@@ -52,23 +161,28 @@
                 <label for="loaiPhanAnh">Loại phản ánh <span class="required">*</span></label>
                 <select id="loaiPhanAnh" name="loaiPhanAnh" required>
                     <option value="">-- Chọn loại phản ánh --</option>
-                    <option value="thoi-gian-cho">Thời gian chờ đợi lâu</option>
-                    <option value="thai-do-nhan-vien">Thái độ nhân viên</option>
-                    <option value="chat-luong-dich-vu">Chất lượng dịch vụ</option>
-                    <option value="co-so-vat-chat">Cơ sở vật chất</option>
+                    <option value="Thời gian chờ đợi">Thời gian chờ đợi lâu</option>
+                    <option value="Thái độ nhân viên">Thái độ nhân viên</option>
+                    <option value="Chất lượng dịch vụ">Chất lượng dịch vụ</option>
+                    <option value="Cơ sở vật chất">Cơ sở vật chất</option>
+                    <option value="Vệ sinh">Vệ sinh môi trường</option>
+                    <option value="Chi phí">Chi phí dịch vụ</option>
+                    <option value="Khác">Ý kiến khác</option>
                 </select>
             </div>
             
             <div class="form-group">
                 <label for="noiDung">Nội dung phản ánh <span class="required">*</span></label>
-                <textarea id="noiDung" name="noiDung" placeholder="Mô tả chi tiết vấn đề..." required></textarea>
+                <textarea id="noiDung" name="noiDung" placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải..." required></textarea>
             </div>
             
-            <button type="submit" class="btn">Gửi Phản Ánh</button>
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">📤 Gửi Phản Ánh</span>
+            </button>
         </form>
         
         <div id="successMessage" class="message success">
-            ✅ Phản ánh đã được gửi thành công!
+            ✅ Phản ánh đã được gửi thành công! Cảm ơn bạn đã đóng góp ý kiến.
         </div>
         
         <div id="errorMessage" class="message error">
@@ -77,35 +191,45 @@
     </div>
 
     <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
+
         document.getElementById('phanAnhForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Hiển thị trạng thái loading
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Đang gửi...';
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const originalText = btnText.textContent;
+            
+            // Hiển thị loading
             submitBtn.disabled = true;
+            btnText.innerHTML = '<div class="loading"></div>Đang gửi...';
             
             // Ẩn thông báo cũ
             document.getElementById('successMessage').style.display = 'none';
             document.getElementById('errorMessage').style.display = 'none';
             
             try {
-                // Lấy dữ liệu form
+                // Lấy và validate dữ liệu form
                 const formData = new FormData(this);
                 const data = {
-                    hoTen: formData.get('hoTen'),
-                    soDienThoai: formData.get('soDienThoai'),
+                    hoTen: (formData.get('hoTen') || '').trim(),
+                    soDienThoai: (formData.get('soDienThoai') || '').trim(),
                     khoaPhong: formData.get('khoaPhong'),
                     loaiPhanAnh: formData.get('loaiPhanAnh'),
-                    noiDung: formData.get('noiDung'),
+                    noiDung: (formData.get('noiDung') || '').trim(),
                     thoiGian: new Date().toLocaleString('vi-VN')
                 };
-                
+
+                // Validate dữ liệu
+                if (!data.hoTen || !data.soDienThoai || !data.khoaPhong || !data.loaiPhanAnh || !data.noiDung) {
+                    throw new Error('Vui lòng điền đầy đủ thông tin bắt buộc');
+                }
+
+                if (data.soDienThoai.length < 10) {
+                    throw new Error('Số điện thoại không hợp lệ');
+                }
+
                 console.log('📤 Đang gửi dữ liệu:', data);
-                
-                // 👇 THAY THẾ BẰNG URL APPS SCRIPT CỦA BẠN
-                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
                 
                 // Gửi request đến Apps Script
                 const response = await fetch(APPS_SCRIPT_URL, {
@@ -116,8 +240,11 @@
                     body: JSON.stringify(data)
                 });
                 
+                console.log('📨 Response status:', response.status);
+                
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    throw new Error(`Lỗi server: ${response.status} - ${errorText}`);
                 }
                 
                 const result = await response.text();
@@ -127,21 +254,31 @@
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
                 
+                // Tự động ẩn thông báo sau 5 giây
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+                
             } catch (error) {
                 console.error('❌ Lỗi:', error);
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('errorMessage').innerHTML = '❌ Lỗi: ' + error.message;
+                document.getElementById('errorMessage').innerHTML = `❌ ${error.message}`;
+                
+                // Tự động ẩn thông báo lỗi sau 5 giây
+                setTimeout(() => {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 5000);
             } finally {
                 // Khôi phục button
-                submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
+                btnText.textContent = originalText;
             }
         });
 
         // Test kết nối khi trang load
         async function testConnection() {
             try {
-                const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
+                console.log('🔗 Đang kiểm tra kết nối...');
                 const response = await fetch(APPS_SCRIPT_URL);
                 const result = await response.text();
                 console.log('🔗 Kết nối thành công:', result);
@@ -151,7 +288,21 @@
         }
         
         // Chạy test khi trang load
-        testConnection();
+        window.addEventListener('load', () => {
+            testConnection();
+            console.log('🚨 Để debug, mở Developer Console (F12) để xem chi tiết lỗi');
+        });
+
+        // Thêm hiệu ứng cho form
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>
