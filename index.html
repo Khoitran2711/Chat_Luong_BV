@@ -185,6 +185,47 @@
             resize: vertical;
         }
 
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            color: #7f8c8d;
+        }
+
+        .file-input-label:hover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
         .btn-submit {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
@@ -423,6 +464,20 @@
                     <textarea id="noiDung" name="noiDung" placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải. Mọi thông tin đều được bảo mật..." required></textarea>
                 </div>
                 
+                <!-- Thêm trường đính kèm hình ảnh -->
+                <div class="form-group full-width">
+                    <label for="hinhAnh">Đính kèm hình ảnh (tùy chọn)</label>
+                    <div class="file-input-container">
+                        <label for="hinhAnh" class="file-input-label" id="fileInputLabel">
+                            📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)
+                        </label>
+                        <input type="file" id="hinhAnh" name="hinhAnh" class="file-input" accept="image/jpeg,image/png" onchange="previewImage(this)">
+                    </div>
+                    <div class="file-preview" id="filePreview">
+                        <img id="previewImage" src="" alt="Xem trước hình ảnh">
+                    </div>
+                </div>
+                
                 <button type="submit" class="btn-submit" id="submitBtn">
                     <span id="btnText">📤 GỬI PHẢN ÁNH</span>
                 </button>
@@ -461,6 +516,7 @@
 
     <script>
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
+        let selectedFile = null;
 
         // Kiểm tra kết nối khi trang load
         async function checkConnection() {
@@ -476,6 +532,38 @@
             } catch (error) {
                 statusEl.innerHTML = `<span style="color: #e74c3c;">❌ Lỗi kết nối - ${error.message}</span>`;
                 console.error('❌ Lỗi kết nối:', error);
+            }
+        }
+
+        // Xử lý xem trước hình ảnh
+        function previewImage(input) {
+            const preview = document.getElementById('previewImage');
+            const filePreview = document.getElementById('filePreview');
+            const fileInputLabel = document.getElementById('fileInputLabel');
+            
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Kiểm tra kích thước file (tối đa 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Kích thước file không được vượt quá 5MB');
+                    input.value = '';
+                    return;
+                }
+                
+                selectedFile = file;
+                fileInputLabel.textContent = `📎 ${file.name}`;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    filePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                selectedFile = null;
+                fileInputLabel.textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
+                filePreview.style.display = 'none';
             }
         }
 
@@ -505,13 +593,40 @@
                     khoaPhong: formData.get('khoaPhong'),
                     loaiPhanAnh: formData.get('loaiPhanAnh'),
                     noiDung: (formData.get('noiDung') || '').trim(),
-                    thoiGian: new Date().toLocaleString('vi-VN')
+                    thoiGian: new Date().toLocaleString('vi-VN'),
+                    hinhAnh: ''
                 };
 
+                // Xử lý upload hình ảnh nếu có
+                if (selectedFile) {
+                    console.log('📤 Đang upload hình ảnh...');
+                    
+                    // Tạo form data để upload hình ảnh
+                    const uploadFormData = new FormData();
+                    uploadFormData.append('image', selectedFile);
+                    
+                    // Gửi hình ảnh lên server (cần cập nhật URL upload)
+                    const uploadResponse = await fetch('YOUR_IMAGE_UPLOAD_ENDPOINT', {
+                        method: 'POST',
+                        body: uploadFormData
+                    });
+                    
+                    if (uploadResponse.ok) {
+                        const uploadResult = await uploadResponse.json();
+                        data.hinhAnh = uploadResult.imageUrl; // URL hình ảnh đã upload
+                        console.log('✅ Upload hình ảnh thành công:', data.hinhAnh);
+                    } else {
+                        throw new Error('Không thể upload hình ảnh');
+                    }
+                }
+                
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 });
                 
@@ -527,6 +642,9 @@
                 // Hiển thị thông báo thành công
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
+                document.getElementById('filePreview').style.display = 'none';
+                document.getElementById('fileInputLabel').textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
+                selectedFile = null;
                 statusEl.innerHTML = `<span style="color: #27ae60;">✅ Gửi thành công!</span>`;
                 
             } catch (error) {
