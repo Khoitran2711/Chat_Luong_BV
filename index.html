@@ -185,70 +185,6 @@
             resize: vertical;
         }
 
-        .file-input-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 15px;
-            border: 2px dashed #e0e0e0;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-            color: #7f8c8d;
-        }
-
-        .file-input-label:hover {
-            border-color: #3498db;
-            background: rgba(52, 152, 219, 0.05);
-        }
-
-        .file-input-label.has-file {
-            border-color: #2ecc71;
-            background: rgba(46, 204, 113, 0.05);
-            color: #27ae60;
-        }
-
-        .file-input {
-            position: absolute;
-            left: -9999px;
-        }
-
-        .file-preview {
-            margin-top: 10px;
-            display: none;
-            text-align: center;
-        }
-
-        .file-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border: 2px solid #e0e0e0;
-        }
-
-        .remove-image {
-            margin-top: 10px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .remove-image:hover {
-            background: #c0392b;
-        }
-
         .btn-submit {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
@@ -487,22 +423,6 @@
                     <textarea id="noiDung" name="noiDung" placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải. Mọi thông tin đều được bảo mật..." required></textarea>
                 </div>
                 
-                <!-- Thêm trường đính kèm hình ảnh -->
-                <div class="form-group full-width">
-                    <label for="hinhAnh">Đính kèm hình ảnh (tùy chọn)</label>
-                    <div class="file-input-container">
-                        <label for="hinhAnh" class="file-input-label" id="fileInputLabel">
-                            📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)
-                        </label>
-                        <input type="file" id="hinhAnh" name="hinhAnh" class="file-input" accept="image/jpeg,image/png,image/jpg" onchange="previewImage(this)">
-                    </div>
-                    <div class="file-preview" id="filePreview">
-                        <img id="previewImage" src="" alt="Xem trước hình ảnh">
-                        <br>
-                        <button type="button" class="remove-image" onclick="removeImage()">✕ Xóa ảnh</button>
-                    </div>
-                </div>
-                
                 <button type="submit" class="btn-submit" id="submitBtn">
                     <span id="btnText">📤 GỬI PHẢN ÁNH</span>
                 </button>
@@ -540,8 +460,7 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwngMP_y9nHMI6qRPKf0hZuUuxm5XGmCWhNpTJ_v767xl0wlmB6ogybyIV5OQhoXPiM/exec';
-        let selectedFile = null;
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKCMyfJdDkGtyyYuusSyI5cww2PY-ia-eUzgnnv1rAgFXNwJbp74surnJhdvnS0eyyiw/exec';
 
         // Kiểm tra kết nối khi trang load
         async function checkConnection() {
@@ -558,61 +477,6 @@
                 statusEl.innerHTML = `<span style="color: #e74c3c;">❌ Lỗi kết nối - ${error.message}</span>`;
                 console.error('❌ Lỗi kết nối:', error);
             }
-        }
-
-        // Xử lý xem trước hình ảnh
-        function previewImage(input) {
-            const preview = document.getElementById('previewImage');
-            const filePreview = document.getElementById('filePreview');
-            const fileInputLabel = document.getElementById('fileInputLabel');
-            
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                
-                // Kiểm tra kích thước file (tối đa 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('Kích thước file không được vượt quá 5MB');
-                    input.value = '';
-                    return;
-                }
-                
-                // Kiểm tra loại file
-                if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
-                    alert('Chỉ chấp nhận file JPG và PNG');
-                    input.value = '';
-                    return;
-                }
-                
-                selectedFile = file;
-                fileInputLabel.textContent = `📎 ${file.name}`;
-                fileInputLabel.classList.add('has-file');
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    filePreview.style.display = 'block';
-                }
-                reader.onerror = function() {
-                    alert('Lỗi khi đọc file. Vui lòng thử lại với file khác.');
-                    removeImage();
-                }
-                reader.readAsDataURL(file);
-            } else {
-                removeImage();
-            }
-        }
-
-        // Xóa hình ảnh đã chọn
-        function removeImage() {
-            const fileInput = document.getElementById('hinhAnh');
-            const filePreview = document.getElementById('filePreview');
-            const fileInputLabel = document.getElementById('fileInputLabel');
-            
-            fileInput.value = '';
-            selectedFile = null;
-            fileInputLabel.textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
-            fileInputLabel.classList.remove('has-file');
-            filePreview.style.display = 'none';
         }
 
         // Xử lý submit form
@@ -641,18 +505,13 @@
                     khoaPhong: formData.get('khoaPhong'),
                     loaiPhanAnh: formData.get('loaiPhanAnh'),
                     noiDung: (formData.get('noiDung') || '').trim(),
-                    thoiGian: new Date().toLocaleString('vi-VN'),
-                    hinhAnh: selectedFile ? 'Có đính kèm hình ảnh' : 'Không có hình ảnh'
+                    thoiGian: new Date().toLocaleString('vi-VN')
                 };
 
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
-                // Gửi dữ liệu đến Google Apps Script
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify(data)
                 });
                 
@@ -668,13 +527,12 @@
                 // Hiển thị thông báo thành công
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
-                removeImage();
                 statusEl.innerHTML = `<span style="color: #27ae60;">✅ Gửi thành công!</span>`;
                 
             } catch (error) {
                 console.error('❌ Lỗi:', error);
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('errorMessage').innerHTML = '❌ Lỗi khi gửi phản ánh. Vui lòng thử lại.';
+                document.getElementById('errorMessage').innerHTML = '❌ Lỗi: ' + error.message;
                 statusEl.innerHTML = `<span style="color: #e74c3c;">❌ Lỗi khi gửi</span>`;
             } finally {
                 // Khôi phục button
