@@ -209,6 +209,12 @@
             background: rgba(52, 152, 219, 0.05);
         }
 
+        .file-input-label.has-file {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.05);
+            color: #27ae60;
+        }
+
         .file-input {
             position: absolute;
             left: -9999px;
@@ -217,6 +223,7 @@
         .file-preview {
             margin-top: 10px;
             display: none;
+            text-align: center;
         }
 
         .file-preview img {
@@ -224,6 +231,22 @@
             max-height: 200px;
             border-radius: 8px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+        }
+
+        .remove-image {
+            margin-top: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .remove-image:hover {
+            background: #c0392b;
         }
 
         .btn-submit {
@@ -471,10 +494,12 @@
                         <label for="hinhAnh" class="file-input-label" id="fileInputLabel">
                             📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)
                         </label>
-                        <input type="file" id="hinhAnh" name="hinhAnh" class="file-input" accept="image/jpeg,image/png" onchange="previewImage(this)">
+                        <input type="file" id="hinhAnh" name="hinhAnh" class="file-input" accept="image/jpeg,image/png,image/jpg" onchange="previewImage(this)">
                     </div>
                     <div class="file-preview" id="filePreview">
                         <img id="previewImage" src="" alt="Xem trước hình ảnh">
+                        <br>
+                        <button type="button" class="remove-image" onclick="removeImage()">✕ Xóa ảnh</button>
                     </div>
                 </div>
                 
@@ -551,20 +576,43 @@
                     return;
                 }
                 
+                // Kiểm tra loại file
+                if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+                    alert('Chỉ chấp nhận file JPG và PNG');
+                    input.value = '';
+                    return;
+                }
+                
                 selectedFile = file;
                 fileInputLabel.textContent = `📎 ${file.name}`;
+                fileInputLabel.classList.add('has-file');
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     filePreview.style.display = 'block';
                 }
+                reader.onerror = function() {
+                    alert('Lỗi khi đọc file. Vui lòng thử lại với file khác.');
+                    removeImage();
+                }
                 reader.readAsDataURL(file);
             } else {
-                selectedFile = null;
-                fileInputLabel.textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
-                filePreview.style.display = 'none';
+                removeImage();
             }
+        }
+
+        // Xóa hình ảnh đã chọn
+        function removeImage() {
+            const fileInput = document.getElementById('hinhAnh');
+            const filePreview = document.getElementById('filePreview');
+            const fileInputLabel = document.getElementById('fileInputLabel');
+            
+            fileInput.value = '';
+            selectedFile = null;
+            fileInputLabel.textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
+            fileInputLabel.classList.remove('has-file');
+            filePreview.style.display = 'none';
         }
 
         // Xử lý submit form
@@ -594,34 +642,12 @@
                     loaiPhanAnh: formData.get('loaiPhanAnh'),
                     noiDung: (formData.get('noiDung') || '').trim(),
                     thoiGian: new Date().toLocaleString('vi-VN'),
-                    hinhAnh: ''
+                    hinhAnh: selectedFile ? 'Có đính kèm hình ảnh' : 'Không có hình ảnh'
                 };
 
-                // Xử lý upload hình ảnh nếu có
-                if (selectedFile) {
-                    console.log('📤 Đang upload hình ảnh...');
-                    
-                    // Tạo form data để upload hình ảnh
-                    const uploadFormData = new FormData();
-                    uploadFormData.append('image', selectedFile);
-                    
-                    // Gửi hình ảnh lên server (cần cập nhật URL upload)
-                    const uploadResponse = await fetch('YOUR_IMAGE_UPLOAD_ENDPOINT', {
-                        method: 'POST',
-                        body: uploadFormData
-                    });
-                    
-                    if (uploadResponse.ok) {
-                        const uploadResult = await uploadResponse.json();
-                        data.hinhAnh = uploadResult.imageUrl; // URL hình ảnh đã upload
-                        console.log('✅ Upload hình ảnh thành công:', data.hinhAnh);
-                    } else {
-                        throw new Error('Không thể upload hình ảnh');
-                    }
-                }
-                
                 console.log('📤 Đang gửi dữ liệu:', data);
                 
+                // Gửi dữ liệu đến Google Apps Script
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -642,15 +668,13 @@
                 // Hiển thị thông báo thành công
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('phanAnhForm').reset();
-                document.getElementById('filePreview').style.display = 'none';
-                document.getElementById('fileInputLabel').textContent = '📎 Chọn hình ảnh (JPG, PNG, tối đa 5MB)';
-                selectedFile = null;
+                removeImage();
                 statusEl.innerHTML = `<span style="color: #27ae60;">✅ Gửi thành công!</span>`;
                 
             } catch (error) {
                 console.error('❌ Lỗi:', error);
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('errorMessage').innerHTML = '❌ Lỗi: ' + error.message;
+                document.getElementById('errorMessage').innerHTML = '❌ Lỗi khi gửi phản ánh. Vui lòng thử lại.';
                 statusEl.innerHTML = `<span style="color: #e74c3c;">❌ Lỗi khi gửi</span>`;
             } finally {
                 // Khôi phục button
